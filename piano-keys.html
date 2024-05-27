@@ -1,0 +1,19 @@
+<piano-keys>
+	<template shadowrootmode="open">
+		<style></style>
+
+		<svg viewbox="0 0 315 50">
+			<g transform="translate(0,0)">
+				<g>
+					<rect class="white-key key C1 selected" x="0" width="15" height="50"></rect>
+					<circle cx="7.5" cy="40" r="5"></circle>
+				</g>
+			</g>
+		</svg>
+		<div id="pullStop"></div>
+		<slot id="pullArea" name="pull-area"></slot>
+		<slot id="mainContent"></slot>
+	</template>
+
+	<script td-method="connectedCallback"></script>
+</piano-keys>

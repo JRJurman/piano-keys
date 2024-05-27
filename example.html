@@ -1,0 +1,123 @@
+<!-- include the Tram-Deco library -->
+<script src="https://unpkg.com/tram-deco@6"></script>
+<script src="https://unpkg.com/tone@15"></script>
+
+<!-- define some web components -->
+<template id="definitions">
+	<piano-keys>
+		<template shadowrootmode="open">
+			<svg viewbox="0 0 315 50">
+				<defs>
+					<g id="white-key">
+						<rect width="15" height="50" fill="#fff" stroke-width="1px" stroke="#DEDEDE"></rect>
+					</g>
+					<g id="black-key">
+						<rect
+							transform="translate(11, 0)"
+							width="8"
+							height="25"
+							fill="#000"
+							stroke-width="1px"
+							stroke="#DEDEDE"
+						></rect>
+					</g>
+					<g id="octave">
+						<use x="0" y="0" href="#white-key" />
+						<use x="15" y="0" href="#white-key" />
+						<use x="30" y="0" href="#white-key" />
+						<use x="0" y="0" href="#black-key" />
+						<use x="15" y="0" href="#black-key" />
+						<use x="45" y="0" href="#white-key" />
+						<use x="60" y="0" href="#white-key" />
+						<use x="75" y="0" href="#white-key" />
+						<use x="90" y="0" href="#white-key" />
+						<use x="45" y="0" href="#black-key" />
+						<use x="60" y="0" href="#black-key" />
+						<use x="75" y="0" href="#black-key" />
+					</g>
+				</defs>
+			</svg>
+
+			<slot></slot>
+		</template>
+
+		<script td-method="connectedCallback">
+			// keyboardContainer, other elements can reference this to add svg elements
+			this.keyboardContainer = this.shadowRoot.querySelector('svg');
+
+			// synth, from Tone.js, used to create sounds
+			this.synth = new Tone.Synth().toDestination();
+		</script>
+	</piano-keys>
+
+	<piano-key-white>
+		<template shadowrootmode="open"> </template>
+		<script td-method="connectedCallback">
+			const pianoKeys = this.closest('piano-keys') || this.getRootNode().host.closest('piano-keys');
+			const keyboardContainer = pianoKeys.keyboardContainer;
+			this.key = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+			this.key.setAttribute('href', '#white-key');
+			[...this.attributes].forEach((n) => {
+				this.key.setAttribute(n.name, n.value);
+			});
+
+			keyboardContainer.append(this.key);
+
+			this.key.addEventListener('click', () => {
+				pianoKeys.synth.triggerAttackRelease('C4', '8n');
+			});
+		</script>
+		<script td-method="disconnectedCallback">
+			this.key.remove();
+		</script>
+	</piano-key-white>
+
+	<piano-key-black>
+		<template shadowrootmode="open"> </template>
+		<script td-method="connectedCallback">
+			const pianoKeys = this.closest('piano-keys') || this.getRootNode().host.closest('piano-keys');
+			const keyboardContainer = pianoKeys.keyboardContainer;
+			this.key = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+			this.key.setAttribute('href', '#black-key');
+			[...this.attributes].forEach((n) => {
+				this.key.setAttribute(n.name, n.value);
+			});
+
+			keyboardContainer.append(this.key);
+
+			this.key.addEventListener('click', () => {
+				this.remove();
+			});
+		</script>
+		<script td-method="disconnectedCallback">
+			this.key.remove();
+		</script>
+	</piano-key-black>
+
+	<piano-octave>
+		<template shadowrootmode="open">
+			<piano-key-white x="0"></piano-key-white>
+			<piano-key-white x="15"></piano-key-white>
+			<piano-key-white x="30"></piano-key-white>
+			<piano-key-white x="45"></piano-key-white>
+			<piano-key-white x="60"></piano-key-white>
+			<piano-key-white x="75"></piano-key-white>
+			<piano-key-white x="90"></piano-key-white>
+
+			<piano-key-black x="0"></piano-key-black>
+			<piano-key-black x="15"></piano-key-black>
+			<piano-key-black x="45"></piano-key-black>
+			<piano-key-black x="60"></piano-key-black>
+			<piano-key-black x="75"></piano-key-black>
+		</template>
+	</piano-octave>
+</template>
+
+<script>
+	TramDeco.processTemplate(definitions);
+</script>
+
+<!-- use our new element! -->
+<piano-keys>
+	<piano-octave></piano-octave>
+</piano-keys>

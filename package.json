@@ -1,0 +1,22 @@
+{
+	"name": "piano-keys",
+	"version": "1.0.0",
+	"description": "Piano Keys as Web Components",
+	"main": "piano-keys.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "npx tram-deco export-components ./td-pull-to-refresh.html",
+		"start": "serve . -p 3000"
+	},
+	"keywords": [],
+	"author": {
+		"name": "Jesse Jurman",
+		"email": "j.r.jurman@gmail.com",
+		"url": "https://jrjurman.com"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"serve": "^14.2.3",
+		"tram-deco": "^6.0.1"
+	}
+}
